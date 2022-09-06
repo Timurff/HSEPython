@@ -2,6 +2,7 @@ import ast
 
 import astunparse
 import networkx as nx
+import matplotlib.pyplot as plt
 
 
 class VisitAST(ast.NodeVisitor):
@@ -39,7 +40,19 @@ class VisitAST(ast.NodeVisitor):
 
 
 def main():
-    pass
+    walker = VisitAST()
+    filename = 'fibonacci.py'
+
+    with open(filename, 'r') as fin:
+        src = fin.read()
+
+    fig, ax = plt.subplots(figsize=(25, 25))
+
+    node = ast.parse(src)
+    walker.visit(node)
+    nx.draw(walker.graph, with_labels=True, ax=ax)
+
+    plt.savefig('artifacts/ast_fibonacci_ugly_one.png')
 
 
 if __name__ == '__main__':
